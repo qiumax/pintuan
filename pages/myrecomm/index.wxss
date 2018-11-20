@@ -34,6 +34,9 @@ page{
     width:33.3%;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
+    line-height: 100rpx;
+   
 }
 
 .bg-g{

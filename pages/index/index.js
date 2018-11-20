@@ -191,7 +191,6 @@ Page({
       var interval = setInterval(function () {
         if (handlogin.isLogin_true())
         {
-          _this.getping()
           _this.getactivity()
         }
         else
@@ -232,6 +231,7 @@ Page({
             {
               //进行中
               _this.setData({ activitystatus: 1})
+              _this.getping()
             }
             else if(nowtime< starttime)
             {
@@ -354,7 +354,6 @@ getuserphone(){
               console.log(res)
               _this.setData({ product: res.data })
               _this.getactivity()
-              _this.getping()
 
             }
             else {
@@ -501,7 +500,6 @@ getping(){
     wx.stopPullDownRefresh();
     this.getproduct();
     this.getuserphone()
-    this.getactivity()
    
   },
 

@@ -12,8 +12,8 @@ function login(callback) {
         showToast()
       }
     },
-    fail() {
-      console.log('b')
+    fail(res) {
+      console.log(res)
       showToast()
     }
   })
@@ -115,6 +115,7 @@ function isLogin(callback) {
 
 // 判断是否登录
 function isLogin_true() {
+  console.log(wx.getStorageSync('s_id'))
   //登陆状态
   let loginstate = wx.getStorageSync('loginstate')
   console.log(loginstate)

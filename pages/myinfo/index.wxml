@@ -20,7 +20,8 @@
       <label class='table_item_label' style='vertical-align:middle'><text decode="{{true}}" space="{{true}}">手&nbsp;&nbsp;&nbsp;机</text></label>
     </view>
     <view class='input' style='width:50%;text-align:left;margin-left:20rpx;'>
-       <input bindinput='phone_input' value="{{userinfo.phone}}"></input>
+       <input wx:if="{{!userinfo.phone}}" bindinput='phone_input' value="{{userinfo.phone}}"></input>
+        <input wx:if="{{userinfo.phone}}" bindinput='phone_input' value="{{userinfo.phone}}" disabled='disabled'></input>
     </view>
     <view bindtap="sendsms" wx:if="{{!userinfo.phone}}" style='width:30%;text-align:right;padding-right:30rpx;;height:100rpx;line-height:100rpx;font-size:28rpx;color:#666666;vertical-align:middle'>
              发送验证码

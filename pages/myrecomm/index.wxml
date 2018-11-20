@@ -29,7 +29,7 @@
       <view wx:if="{{index % 2 ==0}}" class="tr bg-g" style='height:100rpx;line-height:100rpx;'>
           
           <view class="td"><image src='{{follower.avatar}}' style="width:80rpx;height:80rpx;border-radius:50%;margin-top:40rpx;"/></view>
-          <view class="td" >{{follower.name}}</view>
+          <view class="td" style=' height: 100rpx;'>{{follower.name}}</view>
           <view class="td" >{{follower.follower_num}}人</view>
       </view>
 

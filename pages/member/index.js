@@ -278,9 +278,9 @@ Page({
 getdata:function()
 {
     var _this =this;
-    handlogin.isLogin(() => {
+  handlogin.isLogin(() => {
     wx.request({
-      url: 'https://ping.quxunbao.cn/api/user/userpacks',
+      url: 'https://ping.quxunbao.cn/api/user/getInfo',
       data: {
         'user_id': wx.getStorageSync('user_id'),
         's_id': wx.getStorageSync('s_id'),
@@ -291,11 +291,17 @@ getdata:function()
       }, // 设置请求的 header
       success: function (res) {
         if (!res.data.err) {
-          _this.setData({ userpacks: res.data.redpacks, user: res.data.user })
+
+          console.log(res.data);
+          _this.setData({name: res.data.name })
+          _this.setData({ avatar: wx.getStorageSync('avatar') })
+
         }
         else {
           handlogin.handError(res)
         }
+
+
       },
       complete: function (res) {
         wx.hideNavigationBarLoading()
@@ -303,7 +309,7 @@ getdata:function()
       }
 
     })
-  }),
+    }),
 
     wx.getFileInfo({
       filePath: wx.env.USER_DATA_PATH + '/mycode.png',

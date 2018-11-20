@@ -30,16 +30,16 @@
    <block wx:for="{{userpacks}}" wx:for-index="index" wx:for-item="userpack">
       <view wx:if="{{index % 2 ==0}}" style='height:100rpx;line-height:100rpx;' class="tr bg-g">
         <view class="td" style="width:10%">{{index+1}}</view>
-          <view class="td" >{{userpack.username}}</view>
+          <view class="td" style="height:100rpx;">{{userpack.username}}</view>
           <view wx:if="{{userpack.level == 1 }}" class="td">直接</view>
            <view wx:if="{{userpack.level == 2 }}" class="td">间接</view>
-          <view class="td">{{userpack.amount}}</view>
+          <view class="td">{{userpack.amount/100}}</view>
           <view class="td" style="width:30%">{{userpack.created_at}}</view>
       </view>
 
       <view style='height:100rpx;line-height:100rpx;' class="tr" wx:else>
          <view class="td"  style="width:10%">{{index+1}}</view>
-           <view class="td" >{{userpack.username}}</view>
+           <view class="td" style="height:100rpx;">{{userpack.username}}</view>
           <view wx:if="{{userpack.level == 1 }}" class="td">直接</view>
            <view wx:if="{{userpack.level == 2 }}" class="td">间接</view>
           <view class="td">{{userpack.amount/100}}</view>

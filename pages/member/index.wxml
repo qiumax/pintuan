@@ -2,9 +2,9 @@
 <view class="head_top" style="height:300rpx;">
   <view style="padding-top:30rpx;font-size:30rpx;color:white;text-align:center;">
   
-    <image src="{{user.avatar}}" style="width:120rpx;height:120rpx;border-radius:50%;border:1rpx white solid;"></image>
+    <image src="{{avatar}}" style="width:120rpx;height:120rpx;border-radius:50%;border:1rpx white solid;"></image>
   
-  <view style='vertical-align:middle;line-height:50rpx;'> {{user.name}}</view>
+  <view style='vertical-align:middle;line-height:50rpx;'> {{name}}</view>
       
      
   </view>

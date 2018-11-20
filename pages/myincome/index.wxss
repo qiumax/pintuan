@@ -34,6 +34,8 @@ page{
     width:20%;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
+    
 }
 
 .bg-g{
