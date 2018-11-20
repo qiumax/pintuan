@@ -1,0 +1,76 @@
+<!--头部-->
+<view class="head_top" style="height:300rpx;">
+  <view style="padding-top:30rpx;font-size:30rpx;color:white;text-align:center;">
+  
+    <image src="{{user.avatar}}" style="width:120rpx;height:120rpx;border-radius:50%;border:1rpx white solid;"></image>
+  
+  <view style='vertical-align:middle;line-height:50rpx;'> {{user.name}}</view>
+      
+     
+  </view>
+
+</view>
+
+<!--详情-->
+<view class='view_padding_left' style='margin-top:330rpx;padding-bottom:10rpx;' >
+
+  <view catchtap='myinfo' class='table_item' style="display:flex;flex-flow:row nowrap;justify-content:flex-start;vertical-align:middle">
+    <view style='width:80%'>
+      <image class='icon' src='/images/wode1.png' style='width:40rpx;height:40rpx;vertical-align:middle' />
+      <label class='table_item_label' style='vertical-align:middle;margin-left:-4rpx;'>个人信息</label>
+    </view>
+    <view style='width:20%;text-align:right;margin-right:20rpx'>
+      <image src='/images/arrow.png' style='width:36rpx;height:36rpx;margin-top:32rpx;text-align:right;vertical-align:middle' />
+    </view>
+  </view>
+
+  <view style='width:100%;background-color:white'>
+    <view class='divide'/>
+  </view>
+
+
+   <view catchtap='zhengce' class='table_item' style="display:flex;flex-flow:row nowrap;justify-content:flex-start;vertical-align:middle">
+    <view style='width:80%'>
+      <image class='icon' src='/images/zhengce.png' style='width:36rpx;height:36rpx;vertical-align:middle' />
+      <label class='table_item_label' style='vertical-align:middle'>拼团政策</label>
+    </view>
+    <view style='width:20%;text-align:right;margin-right:20rpx;'>
+      <image src='/images/arrow.png' style='width:36rpx;height:36rpx;margin-top:32rpx;text-align:right;vertical-align:middle' />
+    </view>
+  </view>
+
+  <view style='width:100%;background-color:white'>
+    <view class='divide'/>
+  </view>
+
+
+   <view catchtap='qrcode' class='table_item' style="display:flex;flex-flow:row nowrap;justify-content:flex-start;vertical-align:middle">
+    <view style='width:80%'>
+      <image class='icon' src='/images/qrcode.png' style='width:35rpx;height:35rpx;vertical-align:middle' />
+      <label class='table_item_label' style='vertical-align:middle'>我的二维码</label>
+    </view>
+    <view style='width:20%;text-align:right;margin-right:20rpx;'>
+      <image src='/images/arrow.png' style='width:36rpx;height:36rpx;margin-top:32rpx;text-align:right;vertical-align:middle' />
+    </view>
+  </view>
+
+
+ </view>
+
+<view catchtap="hidepic" class="zhezhao {{isTrue?'isShow':'isHide'}}">
+  <canvas wx:if="{{!qrcode }}" canvas-id="shareCanvas" style="width:1080px;height:1920px;"></canvas>
+    
+    <image wx:if="{{qrcode}}" src="{{qrcode}}" style="width:80%;vertical-align:middle;display:block; margin:auto;"  mode="widthFix"/>
+</view>
+
+
+
+
+    <!--悬浮start-->
+<view class="xuan_bottom" catchtap='gotoHome'>
+   <view style="height:80rpx;width:80rpx;border:1rpx #BDC3C7 solid; border-radius: 50%;">
+   <image src="/images/home.png" style='height:70rpx;width:70rpx;padding-top:5rpx;padding-left:5rpx;'/>
+   </view>
+
+</view>
+<!--悬浮end-->

@@ -1,0 +1,182 @@
+      
+<!--拼团信息start-->
+    <view class='view_padding_left' style='background-color:white;padding-top:20rpx;padding-bottom:20rpx;;' >
+      <!--title-->
+      <view style="height:60rpx;">
+        <span class="span_label_left">当前参团人数：<label style="font-weight:bold;color:#ED1C24;">{{ping.finish_num}}</label></span>
+         <span class="span_label_right">优惠金额: ￥<label style="font-weight:bold;color:#ED1C24;">{{ping.bonus}}</label></span>
+      </view>
+
+      <!--line-->
+      <view class='line'></view>
+
+      <!--content-->
+      <view style="padding-top:20rpx;padding-left:10%;padding-right:10%;">
+          <view style="text-align:center;">
+               <image wx:for="{{avatars}}" wx:for-index="index" class="pt_image" src="{{avatars[index]}}"/>
+              
+          </view>
+          <view style="text-align:center;padding-top:20rpx;font-size:24rpx;color:#666666;">
+          拼团中，剩余时间 {{ping.expired}}
+          </view>
+          
+      </view>
+    </view>
+      <!--拼团信息end-->
+
+    <!--个人信息start-->
+     <view class='view_padding_left' style='background-color:white;margin-top:10px;padding-top:20rpx;' >
+       <!--title-->
+      <view style="height:60rpx;">
+        <span class="span_label_left">个人信息</span>
+   
+      </view>
+
+      <!--line-->
+      <view class='line'></view> 
+      <!--content-->
+     
+
+    
+<view  class='table_item' style="display:flex;flex-flow:row nowrap;justify-content:flex-start;vertical-align:middle;">
+    <view style='width:20%'>
+      <label class='table_item_label' style='vertical-align:middle'><text decode="{{true}}" space="{{true}}">姓&nbsp;&nbsp;&nbsp;名</text></label>
+    </view>
+       <view class='input' style='width:70%;text-align:left;margin-left:20rpx;'>
+       <input bindinput='name_input' value="{{user.name}}"></input>
+    </view>
+  </view>
+
+      <view class='line1'></view>
+
+          <view  class='table_item' style="display:flex;flex-flow:row nowrap;justify-content:flex-start;vertical-align:middle;">
+            <view style='width:20%'>
+              <label class='table_item_label' style='vertical-align:middle'><text decode="{{true}}" space="{{true}}">手&nbsp;&nbsp;&nbsp;机</text></label>
+            </view>
+            <view class='input' style='width:50%;text-align:left;margin-left:20rpx;vertical-align:middle'>
+              <input bindinput='phone_input' value="{{user.phone}}"></input>
+            </view>
+            <view bindtap="sendsms" wx:if="{{!user.phone}}" style='width:30%;text-align:right;height:50rpx;line-height:50rpx;font-size:28rpx;color:#666666;vertical-align:middle'>
+             发送验证码
+            </view>
+          </view>
+
+
+        <view wx:if="{{!user.phone}}" class='line1'></view>
+
+          <view  wx:if="{{!user.phone}}" class='table_item' style="display:flex;flex-flow:row nowrap;justify-content:flex-start;vertical-align:middle">
+            <view style='width:20%'>
+              
+              <label class='table_item_label' style='vertical-align:middle'><text decode="{{true}}" space="{{true}}">验证码</text></label>
+            </view>
+            <view class='input' style='width:70%;text-align:left;margin-left:20rpx;'>
+              <input bindinput='code_input'></input>
+            </view>
+          </view>
+   
+
+    </view> 
+   <!--个人信息end-->
+   
+    <!--支付start-->
+     <view class='view_padding_left' style='background-color:white;margin-top:10px;padding-top:20rpx;padding-bottom:20rpx;' >
+       <!--title-->
+      <view style="height:60rpx;">
+        <span class="span_label_left">支付方式</span>
+   
+      </view>
+
+      <!--line-->
+      <view class='line'></view> 
+      <!--content-->
+      <view style="padding-top:20rpx;font-size:28rpx;color:#666666;height:50rpx;" >    
+        <view style="float:left;"><image src="/images/wxpay.png" style="height:50rpx;width:185rpx;"></image></view>
+        <view style="float:right;"><image src="/images/dui.png" style="height:50rpx;width:50rpx;"></image></view>
+          
+      </view>
+
+    </view> 
+   <!--支付end-->
+
+
+
+<!--拼团步骤start-->
+  <view class='view_padding_left' style='background-color:white;margin-top:10px;padding-top:20rpx;padding-bottom:20rpx;'>
+
+    <!--title-->
+      <view style="height:60rpx;">
+        <span class="span_label_left">拼团步骤</span>
+      </view>
+
+      <!--line-->
+      <view class='line'></view>
+
+      <!--detail-->
+      <view class='order_process' style='padding-top:20rpx;'>
+        <view class='process_wrap'>
+          <view class='process'>
+              <view class='process_line'></view>
+              <view class="view_table_right_colored" >1</view>
+              <view class='process_line' style="background:#ED1C24"></view>
+          </view>
+          <text class='process_name_colored'>选择拼团</text>
+        </view>
+
+        <view class='process_wrap'>
+          <view class='process'>
+              <view class='process_line' style="background:#ED1C24"></view>
+              <view class="view_table_right_colored" >2</view>
+              <view class='process_line' style="background:#ED1C24"></view>
+          </view>
+          <text class='process_name_colored'>支付参团</text>
+        </view>
+
+        <view class='process_wrap'>
+          <view class='process'>
+              <view class='process_line_no'></view>
+               <view class="view_table_right" >3</view>
+              <view class='process_line_no' ></view>
+          </view>
+          <text class='process_name'>邀请好友</text>
+        </view>
+
+        <view class='process_wrap'>
+          <view class='process'>
+              <view class='process_line_no' ></view>
+               <view class="view_table_right" >4</view>
+              <view class='process_line'></view>
+          </view>
+          <text class='process_name'>拼团成功</text>
+        </view>
+    </view>
+
+     
+
+
+  </view>
+ <!--拼团步骤end-->
+
+
+
+<!--tab start-->
+<view class="tab_bottom" style="display:flex;">
+
+
+  <!--金额-->
+  <view style="width:70%;border-right:1px  #E8E8E8 solid;">
+    <view  style="font-size:28rpx;height:100rpx;padding-top:20rpx;color:#666666;padding-left:20rpx;">实付金额：<label style="font-size:38rpx;font-weight:bolder;color:#ED1C24;">￥{{ping.sub_fee}}</label></view>
+    
+  </view>
+
+  <!--提交-->
+  <form bindsubmit="submit" report-submit='true' data-ping_id="{{ping._id}}" style="width:30%;text-align:center;background-color:#ED1C24">
+ 
+      <button form-type="submit"   style="font-size:28rpx;color:white;height:100rpx;line-height:100rpx;background-color:#ED1C24">确认参团</button>
+     
+
+  </form>
+</view>
+<!--tab end-->
+
+
+
