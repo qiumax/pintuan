@@ -92,7 +92,7 @@ Page({
     }
     wx.request({
 
-      url: 'https://ping.quxunbao.cn/api/user/updateInfo',
+      url: 'https://'+app.globalData.host+'/api/user/updateInfo',
       data: {
         'user_id': wx.getStorageSync('user_id'),
         's_id': wx.getStorageSync('s_id'),
@@ -196,7 +196,7 @@ Page({
      
       console.log(this.data.sendtime)
       wx.request({
-        url: 'https://ping.quxunbao.cn/api/sms/sendsms',
+        url: 'https://'+app.globalData.host+'/api/sms/sendsms',
         data: {
           'user_id': wx.getStorageSync('user_id'),
           's_id': wx.getStorageSync('s_id'),
@@ -241,7 +241,7 @@ getdata:function()
   var _this =this;
   handlogin.isLogin(() => {
         wx.request({
-          url: 'https://ping.quxunbao.cn/api/user/getInfo',
+          url: 'https://'+app.globalData.host+'/api/user/getInfo',
           data: {
             'user_id': wx.getStorageSync('user_id'),
             's_id': wx.getStorageSync('s_id'),
@@ -262,7 +262,7 @@ getdata:function()
               })
             }
             else {
-              handlogin.handError(res)
+              handlogin.handError(res,_this.getdata)
             }
 
             

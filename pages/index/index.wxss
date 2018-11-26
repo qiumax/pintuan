@@ -103,7 +103,7 @@ background-color: #E8E8E8;
 }
 .view_table_top_price_2{
 
-  width:45%;
+  width:85%;
   text-align:left;
   font-Size:28rpx;
   color:#666666;

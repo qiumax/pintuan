@@ -12,18 +12,22 @@ Page({
     host: getApp().globalData.host,
     product:[],
     hasUserInfo:true,
-    hasphone:false,//是否有电话信息
-    activitystatus:1, //
-    interval:'',
+    hasphone:true,//是否有电话信息
+    activitystatus:0, //
+    interval:0,
+    counttimeout:0,
     starttime:'',//开始时间
     ping:[],
     share_userid: '',//分销用户id
-    hasping:'',//判断当前是否有拼团
+    hasping:false,//判断当前是否有拼团
     expire:0//带链接拼团id的过期时间
   },
 
 
   gotoHome:function(){
+    console.log('clear interval')
+    clearInterval(this.data.interval)
+    clearTimeout(this.data.counttimeout)
     wx.switchTab({
       url: '../member/index'
     })
@@ -50,7 +54,7 @@ Page({
       //解密数据
       handlogin.isLogin(() => {
         wx.request({
-          url: 'https://ping.quxunbao.cn/api/user/getphone',
+          url: 'https://'+app.globalData.host+'/api/user/getphone',
           data: {
             'user_id': wx.getStorageSync('user_id'),
             's_id': wx.getStorageSync('s_id'),
@@ -67,7 +71,7 @@ Page({
               if(res.data.phoneNumber){
                   //更新
                 wx.request({
-                  url: 'https://ping.quxunbao.cn/api/user/updateInfo',
+                  url: 'https://'+app.globalData.host+'/api/user/updateInfo',
                   data: {
                     'user_id': wx.getStorageSync('user_id'),
                     's_id': wx.getStorageSync('s_id'),
@@ -87,27 +91,48 @@ Page({
              
           },
           complete:function(res){//进入相应页面
+           
+            clearInterval(_this.data.interval)
+            clearTimeout(_this.data.counttimeout)
             if (btn_type == 'member')
             {
+              console.log('clear interval')
               wx.switchTab({
                 url: '../member/index'
               })
             }
             else
             {
-              if (_this.data.hasping) {
-                wx.navigateTo({
-                  url: '../order_other/index?id=' + pt_id
-                })
+              if (_this.data.activitystatus == 1) {
+                if (_this.data.hasping) {
+                  wx.navigateTo({
+                    url: '../order_other/index?id=' + pt_id
+                  })
+                }
+                else {
+                  console.log('aa')
+                  wx.showToast({
+                    icon: 'none',
+                    title: '当前拼团已结束\r\n距离下次开团时间约剩余：5分钟',
+                    duration: 3000
+                  })
+                }
               }
-              else {
-                console.log('aa')
+              else if (_this.data.activitystatus == 2) {
                 wx.showToast({
                   icon: 'none',
-                  title: '当前拼团已结束\r\n距离下次开团时间约剩余：5分钟',
+                  title: '活动未开始',
                   duration: 3000
                 })
+
               }
+              else {
+                wx.showToast({
+                  icon: 'none',
+                  title: '活动已结束',
+                  duration: 3000
+                })
+              }  
 
             }
           }
@@ -122,6 +147,9 @@ Page({
 
   gotoOrderOther: function (e) {
 
+    console.log('clear interval')
+    clearInterval(this.data.interval)
+    clearTimeout(this.data.counttimeout)
     //activitystatus 1进行中 2未开始 3已结束
     if (this.data.activitystatus == 1)
     {
@@ -162,6 +190,7 @@ Page({
 
 
   onLoad: function (option) {
+    console.log(app.globalData.host)
     console.log('onload')
     console.log(option)
     //二维码
@@ -177,8 +206,12 @@ Page({
   },
 
   onHide:function(){
-    console.log('onhide')
+    this.setData({activity:''})
+    console.log(this.data.interval)
+    console.log(this.data.counttimeout)
     clearInterval(this.data.interval)
+    clearTimeout(this.data.counttimeout)
+    console.log('onhide')
   },
 
   onShow:function(){
@@ -186,20 +219,7 @@ Page({
     var _this =this
     handlogin.isLogin(() => {
       _this.getproduct()
-      _this.getuserphone()
-      // this.getping()
-      var interval = setInterval(function () {
-        if (handlogin.isLogin_true())
-        {
-          _this.getactivity()
-        }
-        else
-        {
-          clearInterval(interval)
-        }
-      }, 30000) //循环 
-      _this.setData({interval:interval})
-      _this.getpics()
+
     })
 
   },
@@ -210,7 +230,7 @@ Page({
     console.log('get getactivity')
     var _this = this
       wx.request({
-        url: 'https://ping.quxunbao.cn/api/activity/getactivity',
+        url: 'https://'+app.globalData.host+'/api/activity/getactivity',
         data: {
           'user_id': wx.getStorageSync('user_id'),
           's_id': wx.getStorageSync('s_id'),
@@ -247,8 +267,8 @@ Page({
 
           }
           else {
-            wx.setStorageSync('loginstate', '')
-            handlogin.handError(res)
+           
+            handlogin.handError(res,_this.getactivity)
           }
         }
 
@@ -284,7 +304,7 @@ getuserphone(){
   handlogin.isLogin(() => {
     //用户信息
     wx.request({
-      url: 'https://ping.quxunbao.cn/api/user/getInfo',
+      url: 'https://'+app.globalData.host+'/api/user/getInfo',
       data: {
         'user_id': wx.getStorageSync('user_id'),
         's_id': wx.getStorageSync('s_id'),
@@ -296,12 +316,13 @@ getuserphone(){
       success: function (res) {
         console.log(res)
         if (!res.data.err) {
-          if (res.data.phone) {
-            _this.setData({hasphone:true})
-          } 
+          if (!res.data.phone) {
+            _this.setData({hasphone:false})
+          }
+           
         }
         else {
-          handlogin.handError(res)
+          handlogin.handError(res, _this.getuserphone)
         }
       }
 
@@ -338,7 +359,7 @@ getuserphone(){
     var _this=this
       handlogin.isLogin(()=>{
         wx.request({
-          url: 'https://ping.quxunbao.cn/api/product',
+          url: 'https://'+app.globalData.host+'/api/product',
           data: {
             'id': '5bda65617c65fac03d619993',
             'user_id': wx.getStorageSync('user_id'),
@@ -354,12 +375,23 @@ getuserphone(){
               console.log(res)
               _this.setData({ product: res.data })
               _this.getactivity()
+              _this.getuserphone()
 
+              //清除定时任务 再开启
+              clearInterval(_this.data.interval)
+
+              wx.setStorageSync('picversion',res.data.version)
+              var interval = setInterval(function () { 
+                  _this.getactivity()
+               
+              }, 30000) //循环 
+              _this.setData({ interval: interval })
+              
+              _this.getpics()
             }
             else {
-              wx.setStorageSync('loginstate','')
               console.log(res)
-              handlogin.handError(res)
+              handlogin.handError(res,_this.getproduct)
             }
           },
           complete:function(res){
@@ -373,58 +405,65 @@ getuserphone(){
 //图片
 getpics(){
   console.log('get-getpics')
+  var version = 'v001'
+  if (wx.getStorageSync('picversion'))
+  {
+    console.log(wx.getStorageSync('picversion'))
+    version = wx.getStorageSync('picversion')
+  }
+    
   //pics
   var _this =this
   wx.getFileInfo({
-    filePath: wx.env.USER_DATA_PATH + '/toppic.jpg',
+    filePath: wx.env.USER_DATA_PATH + '/' + version+'toppic.jpg',
     success: res => {
       console.log('open loacl success')
-      _this.setData({ toppic: wx.env.USER_DATA_PATH + '/toppic.jpg' })
+      _this.setData({ toppic: wx.env.USER_DATA_PATH + '/' + version +'toppic.jpg' })
     },
     fail: res => {
       console.log('save')
-      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/truck.jpg', wx.env.USER_DATA_PATH + '/toppic.jpg')
-      _this.setData({ toppic: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/truck.jpg' })
+      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version +'/truck.jpg', wx.env.USER_DATA_PATH + '/'  + version+'toppic.jpg')
+      _this.setData({ toppic: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version +'/truck.jpg' })
     }
   })
 
   wx.getFileInfo({
-    filePath: wx.env.USER_DATA_PATH + '/detail.jpg',
+    filePath: wx.env.USER_DATA_PATH + '/' + version +'detail.jpg',
     success: res => {
       console.log('open loacl success')
-      _this.setData({ detail: wx.env.USER_DATA_PATH + '/detail.jpg' })
+      _this.setData({ detail: wx.env.USER_DATA_PATH + '/' + version +'detail.jpg' })
     },
     fail: res => {
       console.log('save')
-      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/detail.jpg', wx.env.USER_DATA_PATH + '/detail.jpg')
-      _this.setData({ detail: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/detail.jpg' })
+      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version + '/detail.jpg', wx.env.USER_DATA_PATH + '/' + version +'detail.jpg')
+      _this.setData({ detail: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version +'/detail.jpg' })
     }
   })
 
   wx.getFileInfo({
-    filePath: wx.env.USER_DATA_PATH + '/zhengce.jpg',
+    filePath: wx.env.USER_DATA_PATH + '/' + version +'zhengce.jpg',
     success: res => {
       console.log('open loacl success')
-      _this.setData({ zhengce: wx.env.USER_DATA_PATH + '/zhengce.jpg' })
+      _this.setData({ zhengce: wx.env.USER_DATA_PATH + '/' + version +'zhengce.jpg' })
     },
     fail: res => {
       console.log('save')
-      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/policy.jpg', wx.env.USER_DATA_PATH + '/zhengce.jpg')
-      _this.setData({ zhengce: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/policy.jpg' })
+      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version + '/policy.jpg', wx.env.USER_DATA_PATH + '/' + version +'zhengce.jpg')
+      _this.setData({ zhengce: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version +'/policy.jpg' })
     }
   })
 
   wx.getFileInfo({
-    filePath: wx.env.USER_DATA_PATH + '/config.jpg',
+    filePath: wx.env.USER_DATA_PATH + '/' + version +'config.jpg',
     success: res => {
       console.log('open loacl success')
-      _this.setData({ config: wx.env.USER_DATA_PATH + '/config.jpg' })
+      _this.setData({ config: wx.env.USER_DATA_PATH + '/' + version +'config.jpg' })
     },
     fail: res => {
       console.log(res)
       console.log('save')
-      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/config.jpg', wx.env.USER_DATA_PATH + '/config.jpg')
-      _this.setData({ config: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/config.jpg' })
+      app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version + '/config.jpg', wx.env.USER_DATA_PATH + '/' + version +'config.jpg')
+      _this.setData({ config: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version +'/config.jpg' })
     }
   })
 
@@ -437,7 +476,7 @@ getping(){
   var _this = this
   //加载拼团
   wx.request({
-    url: 'https://ping.quxunbao.cn/api/ping/currentPing',
+    url: 'https://'+app.globalData.host+'/api/ping/currentPing',
     data: {
       'user_id': wx.getStorageSync('user_id'),
       's_id': wx.getStorageSync('s_id'),
@@ -453,8 +492,8 @@ getping(){
         var ser_utc = res.data.server_ts
         var now_utc = Date.parse(new Date()) / 1000
         var dis_utc = ser_utc - now_utc
-        console.log(expire > ser_utc)
-        if (expire > ser_utc) {
+        console.log(res.data.ping.finish_num )
+        if (expire > ser_utc && res.data.ping.finish_num<200) {
           _this.setData({ hasping: true })
           var rules = res.data.ping.rules
           var finish_num = res.data.ping.finish_num
@@ -478,9 +517,8 @@ getping(){
       }
       else
       {
-        wx.setStorageSync('loginstate', '')
         _this.setData({ hasping: false })
-        handlogin.handError(res)
+        handlogin.handError(res,_this.getping)
       }
 
 
@@ -499,7 +537,6 @@ getping(){
   onPullDownRefresh: function () {
     wx.stopPullDownRefresh();
     this.getproduct();
-    this.getuserphone()
    
   },
 
@@ -508,6 +545,7 @@ getping(){
   },
 
   countDown: function () {//倒计时函数
+    clearTimeout(this.data.counttimeout)
     // 获取当前时间，同时得到活动结束时间数组
     let endTime = this.data.expire;
     let newTime = Date.parse(new Date());
@@ -535,7 +573,12 @@ getping(){
 
       // 渲染，然后每隔一秒执行一次倒计时函数
       this.setData({ expired: expired })
-      setTimeout(this.countDown, 1000);
+      //var countInterval = setInterval(function() {
+     //   this.countDown
+     // }, 1000)
+      var counttimeout  = setTimeout(this.countDown, 1000);
+      this.setData({ counttimeout: counttimeout})
+      
     }
     else {
       this.setData({ hasping: false }) 
@@ -550,9 +593,9 @@ getping(){
     var user_id = wx.getStorageSync('user_id');
     var name = wx.getStorageSync('name')
     var path='pages/index/index?userid='+user_id;
-
+    name = name.substring(0,4)
     return {
-      title: '就差你了，'+name+'喊你来拼团抢三一了；最高4000元优惠不要白不要',
+      title: '转发不买，也能赚大钱，'+name+'喊你来拼团，最高优惠4000元',
       imageUrl: '/images/share.png',
       path: path
     }

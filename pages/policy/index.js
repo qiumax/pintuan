@@ -13,16 +13,21 @@ Page({
    */
   onLoad: function (options) {
     var _this =this
+    var version = 'v001'
+    if (wx.getStorageSync('picversion')) {
+      console.log(wx.getStorageSync('picversion'))
+      version = wx.getStorageSync('picversion')
+    }
     wx.getFileInfo({
-      filePath: wx.env.USER_DATA_PATH + '/zhengce.jpg',
+      filePath: wx.env.USER_DATA_PATH + '/' + version+'zhengce.jpg',
       success: res => {
         console.log('open loacl success')
-        _this.setData({ zhengce: wx.env.USER_DATA_PATH + '/zhengce.jpg' })
+        _this.setData({ zhengce: wx.env.USER_DATA_PATH + '/' + version+'zhengce.jpg' })
       },
       fail: res => {
         console.log('save')
-        app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/policy.jpg', wx.env.USER_DATA_PATH + '/zhengce.jpg')
-        _this.setData({ zhengce: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/policy.jpg' })
+        app.saveindexfile('https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version + '/policy.jpg', wx.env.USER_DATA_PATH + '/'+version+'zhengce.jpg')
+        _this.setData({ zhengce: 'https://ping-1257242347.cos.ap-chongqing.myqcloud.com/' + version+'policy.jpg' })
       }
     })
   },

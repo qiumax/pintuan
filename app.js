@@ -4,6 +4,8 @@ App({
   
   onLaunch: function (options) {
 
+    
+
     console.log('onLauch');
 
     console.log('options');
@@ -12,7 +14,61 @@ App({
     if (options.scene == 1044) {
       console.log(options.shareTicket)
     }
+    /*
+    //基础库版本
+    wx.getSystemInfo({
+      success(res) {
+        if(res.SDKVersion<'2.9.9')
+        {
+          wx.showModal({
+            title: '提示',
+            content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+          })
+          return
+        }
+       
+      }
+    })
 
+    if (wx.canIUse('getUpdateManager')) {
+        const updateManager = wx.getUpdateManager()
+
+        updateManager.onCheckForUpdate(function (res) {
+          // 请求完新版本信息的回调
+          console.log(res.hasUpdate)
+        })
+        updateManager.onUpdateReady(function () {
+          wx.showModal({
+            title: '更新提示',
+            content: '新版本已经准备好，是否重启应用？',
+            success: function (res) {
+              if (res.confirm) {
+                // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                updateManager.applyUpdate()
+              }
+            }
+          })
+        })
+
+      updateManager.onUpdateFailed(function () {
+        // 新的版本下载失败
+        wx.showModal({
+          title: '更新提示',
+          content: '新版本下载失败，请重试',
+          showCancel: false
+        })
+      })
+        
+    }
+    else{
+
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+      })
+
+    }
+*/
     // 登录
     //wx.login({
     //  success: res => {
@@ -50,6 +106,14 @@ App({
     console.log('onlanch end');
   },
 
+  globalData: {
+    userInfo: null,
+    accesstoken: null,
+    logged_in: 0,
+    host: 'ping-test.quxunbao.cn'
+  },
+
+
   getUseridandSess: function(userinfo,userid) {
     return new Promise(function (resolve, reject) {
     console.log('getUseridandSess');
@@ -70,7 +134,7 @@ App({
 
             //请求服务器
             wx.request({
-              url: "https://ping.quxunbao.cn/wx/getWxUserInfo",
+              url: "https://"+this.globalData.host+"/wx/getWxUserInfo",
               data: {
                 code: code,
                 refer_id:userid,
@@ -116,7 +180,7 @@ App({
    let that = this
    return new Promise(function (resolve, reject) {
    wx.request({
-     url: 'https://ping.quxunbao.cn/api/user/userpings',
+     url: 'https://' + that.globalData.host+'/api/user/userpings',
      data: {
        'user_id': wx.getStorageSync('user_id'),
        's_id': wx.getStorageSync('s_id'),
@@ -175,9 +239,10 @@ App({
 
 //获取用户单个拼团信息
   getUserping: function (user_ping_id) {
+    let that = this
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: 'https://ping.quxunbao.cn/api/user/userping',
+        url: 'https://' + that.globalData.host +'/api/user/userping',
         data: {
           'user_ping_id': user_ping_id,
           'user_id': wx.getStorageSync('user_id'),
@@ -221,9 +286,10 @@ App({
 
   //获取用户信息
   getUserinfo: function (user_ping_id) {
+    let that = this
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: 'https://ping.quxunbao.cn/api/user/userinfo',
+        url: 'https://'+that.globalData.host+'/api/user/userinfo',
         data: {
           'user_id': wx.getStorageSync('user_id'),
           's_id': wx.getStorageSync('s_id'),
@@ -248,9 +314,10 @@ App({
 
 //根据id获取拼团信息
  getpingInfo:function(pingid){
+   let that = this
    return new Promise(function (resolve, reject) {
    wx.request({
-     url: 'https://ping.quxunbao.cn/api/ping',
+     url: 'https://'+that.globalData.host+'/api/ping',
      data: {
        //'id': '5bdc1892fbc5b0186164bb86',
        'id': pingid,
@@ -314,10 +381,11 @@ App({
 
 //根据拼团id获取头像信息
 getavatarsfrompingid:function(pingid){
+  let that = this
   return new Promise(function (resolve, reject) {
     wx.request({
 
-      url: 'https://ping.quxunbao.cn/api/ping/avatars',
+      url: 'https://' + that.globalData.host +'/api/ping/avatars',
       data: {
         'ping_id': pingid,
         'user_id': wx.getStorageSync('user_id'),
@@ -388,13 +456,8 @@ saveindexfile:function(url,name){
     }
   })
   
-},
-  globalData: {
-    userInfo: null,
-    accesstoken:null,
-    logged_in: 0,
-    host: 'https://ping.quxunbao.cn'
-  }
+}
+
 
   
 })

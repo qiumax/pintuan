@@ -1,6 +1,7 @@
+const app = getApp()
 // 开始login
 function login(callback) {
-  wx.showLoading()
+ // wx.showLoading()
   wx.login({
     success(res) {
       if (res.code) {
@@ -15,6 +16,7 @@ function login(callback) {
     fail(res) {
       console.log(res)
       showToast()
+      showLoginModal()
     }
   })
 }
@@ -34,9 +36,6 @@ function getUserInfo(code, callback) {
     // 获取失败，弹窗提示一键登录
     fail() {
       wx.hideLoading()
-      wx.setStorageSync(UserInfo, '')
-      //登陆状态
-      wx.setStorageSync('loginstate', '')
       showLoginModal()
     }
   })
@@ -45,7 +44,7 @@ function getUserInfo(code, callback) {
 // 服务端登录
   function postLogin(code, userinfo, callback) {
     wx.request({
-      url: "https://ping.quxunbao.cn/wx/getWxUserInfo",
+      url: "https://"+app.globalData.host+"/wx/getWxUserInfo",
       data: {
         code: code,
         refer_id: wx.getStorageSync('share_userid'),//分享 二维码对应的用户id
@@ -108,6 +107,7 @@ function isLogin(callback) {
     callback && callback()
   } else {
     // 如果没有登录态，弹窗提示一键登录
+    console.log('gagaga')
     showLoginModal()
   }
 }
@@ -130,11 +130,14 @@ function isLogin_true() {
 
 // 接口调用失败处理，
 function handError(res, callback) {
-    wx.setStorageSync('loginstate', '')
+   // wx.setStorageSync('loginstate', '')
   // 规定err=expired代表未登录和登录态失效
   if (res.data.err == 'expired') {
     // 弹窗提示一键登录
-    showLoginModal()
+    console.log('expired')
+    //showLoginModal()
+   this.login(callback)
+   wx.hideLoading()
   } else if (res.data.err) {
     // 弹窗显示错误信息
     showToast(res.data.err)

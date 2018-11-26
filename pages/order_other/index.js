@@ -65,7 +65,7 @@ Page({
     }
     wx.request({
 
-      url: 'https://ping.quxunbao.cn/api/ping/joinPing',
+      url: 'https://'+app.globalData.host+'/api/ping/joinPing',
       data: {
         'user_id': wx.getStorageSync('user_id'),
         's_id': wx.getStorageSync('s_id'),
@@ -148,8 +148,7 @@ Page({
 onShow:function(){
   var _this = this;
   _this.getpintuan()
-  _this.getavatars()
-  _this.getinfo()  
+ 
 },
 
   phone_input: function (e) {
@@ -210,7 +209,7 @@ onShow:function(){
       })
       
       wx.request({
-        url: 'https://ping.quxunbao.cn/api/sms/sendsms',
+        url: 'https://'+app.globalData.host+'/api/sms/sendsms',
         data: {
           'user_id': wx.getStorageSync('user_id'),
           's_id': wx.getStorageSync('s_id'),
@@ -254,9 +253,11 @@ getpintuan(){
 
       if (!res.data.err) {
         _this.setData({ ping: res.data[0] })
+        _this.getavatars()
+        _this.getinfo() 
       }
       else {
-        handlogin.handError(res)
+        handlogin.handError(res,_this.getpintuan)
       }
      
     })
@@ -272,9 +273,7 @@ getavatars(){
       if (!res.data.err) {
         _this.setData({ avatars: res.data })
       }
-      else {
-        handlogin.handError(res)
-      }
+
 
     })
   })
@@ -286,7 +285,7 @@ getinfo(){
     //用户信息
 
     wx.request({
-      url: 'https://ping.quxunbao.cn/api/user/getInfo',
+      url: 'https://'+app.globalData.host+'/api/user/getInfo',
       data: {
         'user_id': wx.getStorageSync('user_id'),
         's_id': wx.getStorageSync('s_id'),
@@ -306,10 +305,7 @@ getinfo(){
             phone: res.data.phone,
           })
         }
-        else {
-          handlogin.handError(res)
-        }
-
+       
 
       },
       complete: function (res) {

@@ -34,21 +34,16 @@ Page({
         app.getUserping(this.data.pingid).then(function (res) {
           if (!res.data.err) {
             app.getavatarsfrompingid(res.data.ping_id._id).then(function (resavatar) {
-              if(!resavatar.data.err){
+              if(!resavatar.data.err)
                 console.log(resavatar.data)
                 res.data.finishtime = util.utcformat(res.data.updated_at)
                 _this.setData({ ping: res.data })
                 _this.setData({ avatars: resavatar.data })
-              }
-              else
-              {
-                handlogin.handError(res)
-              }
-
+              
             })
           }
           else {
-            handlogin.handError(res)
+            handlogin.handError(res, _this.getdata)
           }
 
    
@@ -71,12 +66,14 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    //带用户ID 带拼团ID
     var user_id = wx.getStorageSync('user_id');
+    var name = wx.getStorageSync('name')
     var path = 'pages/index/index?userid=' + user_id;
+    name = name.substring(0, 4)
     return {
-      title: '三一重卡',
+      title: '转发不买，也能赚大钱，' + name + '喊你来拼团，最高优惠4000元',
       imageUrl: '/images/share.png',
-      //path: 'pages/index/index?pingid='+this.data.pingid
       path: path
     }
   }

@@ -8,6 +8,7 @@ Page({
    */
   data: {
     followers: [],
+    followers_num:0,
     user:[],
     pic:''
 
@@ -37,7 +38,7 @@ getdata:function()
   var _this = this;
   handlogin.isLogin(() => {
         wx.request({
-          url: 'https://ping.quxunbao.cn/api/user/userfollowers',
+          url: 'https://'+app.globalData.host+'/api/user/userfollowers',
           data: {
             'user_id': wx.getStorageSync('user_id'),
             's_id': wx.getStorageSync('s_id'),
@@ -50,10 +51,11 @@ getdata:function()
 
             if (!res.data.err) {
               console.log(res);
+              _this.setData({ followers_num:res.data.followers.length})
               _this.setData({ followers: res.data.followers, user: res.data.user })
             }
             else {
-              handlogin.handError(res)
+              handlogin.handError(res,_this.getdata)
             }
 
           },

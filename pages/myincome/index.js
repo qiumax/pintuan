@@ -8,6 +8,7 @@ Page({
    */
   data: {
     userpacks: [],
+    sumpack:0,
     user:[]
    
   },
@@ -40,7 +41,7 @@ getdata:function()
   var _this =this;
   handlogin.isLogin(() => {
       wx.request({
-        url: 'https://ping.quxunbao.cn/api/user/userpacks',
+        url: 'https://'+app.globalData.host+'/api/user/userpacks',
         data: {
           'user_id': wx.getStorageSync('user_id'),
           's_id': wx.getStorageSync('s_id'),
@@ -51,16 +52,19 @@ getdata:function()
         }, // 设置请求的 header
         success: function (res) {
           if (!res.data.err) {
+            var sum = 0
             console.log(res);
             console.log(res.data.redpacks)
             res.data.redpacks.forEach((v, i) => {
               var tm = v.created_at.substring(0, 10)
               res.data.redpacks[i].created_at = tm
+              sum = sum + v.amount
             })
+            _this.setData({ sumpack:sum/100})
             _this.setData({ userpacks: res.data.redpacks, user: res.data.user })
           }
           else {
-            handlogin.handError(res)
+            handlogin.handError(res,_this.getdata)
           }
           
 

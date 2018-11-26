@@ -9,8 +9,8 @@
  <view class='view_padding_left' style='background-color:white;margin-top:10px;padding-top:20rpx;padding-bottom:20rpx;' >
       <!--title-->
       <view style="height:60rpx;">
-              <span class="span_label_left">当前参团人数：{{ping.finish_num}}</span>
-         <span class="span_label_right">优惠金额: ￥<label style="font-weight:bold;color:#ED1C24;">{{ping.bonus}}</label></span>
+              <span class="span_label_left">当前参团人数：{{ping.ping_id.finish_num}}</span>
+         <span class="span_label_right">优惠金额: ￥<label style="font-weight:bold;color:#ED1C24;">{{ping.ping_id.bonus}}</label></span>
       </view>
 
       <!--line-->

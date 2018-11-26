@@ -11,7 +11,7 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.4.0",
+	"libVersion": "1.9.9",
 	"appid": "wx26b5571fa5d85590",
 	"projectname": "pintuan",
 	"debugOptions": {
@@ -27,13 +27,23 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 0,
+			"list": [
+				{
+					"id": -1,
+					"name": "111",
+					"pathName": "pages/index/index"
+				}
+			]
 		}
 	}
 }

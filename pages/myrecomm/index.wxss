@@ -35,7 +35,6 @@ page{
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    line-height: 100rpx;
    
 }
 
@@ -63,8 +62,8 @@ background-color: #E8E8E8;
 .xuan_bottom{
   position: fixed;
   bottom: 50rpx;
-  width: 70rpx;
-  height: 70rpx;
-  right: 30rpx;
+  width: 110rpx;
+  height: 110rpx;
+  right: 50rpx;
 
 }

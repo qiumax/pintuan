@@ -40,14 +40,10 @@ onShow:function(){
               _this.setData({ ping: res.data })
               _this.setData({ avatars: resavatar.data })
             }
-            else {
-              handlogin.handError(res)
-            }
-
           })
         }
         else {
-          handlogin.handError(res)
+          handlogin.handError(res,_this.getdata)
         }
 
 
@@ -69,18 +65,14 @@ onShow:function(){
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {    //带用户ID 带拼团ID
+  onShareAppMessage: function () {
+    //带用户ID 带拼团ID
     var user_id = wx.getStorageSync('user_id');
     var name = wx.getStorageSync('name')
     var path = 'pages/index/index?userid=' + user_id;
-
-    //var linkpingid = this.data.linkpingid
-    //if(linkpingid)
-    //{
-    //    path = path+ '&pingid=' + linkpingid;
-    //}
+    name = name.substring(0, 4)
     return {
-      title: '就差你了，' + name + '喊你来拼团抢三一了；最高4000元优惠不要白不要',
+      title: '转发不买，也能赚大钱，' + name + '喊你来拼团，最高优惠4000元',
       imageUrl: '/images/share.png',
       path: path
     }

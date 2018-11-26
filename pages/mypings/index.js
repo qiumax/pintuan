@@ -10,11 +10,14 @@ Page({
     allpings: [],//全部
     succpings:[],//成功
     almostpings:[],//拼团中
+    interval:0
   },
 
 
   gotoHome: function () {
-
+    clearInterval(this.data.interval)
+    console.log(this.data.interval)
+    console.log('onhide clear interval')
     wx.redirectTo({
       url: '../index/index'
     })
@@ -33,7 +36,8 @@ Page({
 
     if(user_ping_id)//跳转进入详情
     {
-      
+      clearInterval(this.data.interval)
+      console.log(this.data.interval)
       app.getUserping(user_ping_id).then((res) => {
           //判断状态 进入不同的页面
           if(res.data.ping_id.state == 1)
@@ -57,9 +61,22 @@ Page({
   },
 
 onShow:function(){
-  this.getData();
+  var _this =this
+  _this.getData();
+  var interval = setInterval(function () {
+    _this.getData()
+  }, 10000) //循环 
+  console.log(interval)
+  _this.setData({ interval:interval})
 },
 
+
+onHide: function () {
+  clearInterval(this.data.interval)
+  console.log(this.data.interval)
+  console.log('onhide clear interval')
+  
+ },
 
   getData: function () {
     console.log('getdata');
@@ -104,7 +121,7 @@ onShow:function(){
                   }
               }
               else {
-                handlogin.handError(res)
+                handlogin.handError(res,_this.getdata)
               }
               
             })
@@ -112,6 +129,8 @@ onShow:function(){
   },
 
   gotopingdetail: function (e) {
+    clearInterval(this.data.interval)
+    console.log(this.data.interval)
     var ping_id = e.currentTarget.dataset.ping_id
     //判断状态
     app.getUserping(ping_id).then((res) => {
